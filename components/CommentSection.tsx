@@ -24,6 +24,36 @@ interface CommentSectionProps {
   initialCount: number;
 }
 
+const COMMENT_VOTES_STORAGE_KEY = "superior_conn_comment_votes";
+
+function getStoredCommentVote(commentId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const raw = localStorage.getItem(COMMENT_VOTES_STORAGE_KEY);
+    if (!raw) return 0;
+    const map = JSON.parse(raw);
+    return typeof map[commentId] === "number" ? map[commentId] : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function setStoredCommentVote(commentId: string, vote: number) {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(COMMENT_VOTES_STORAGE_KEY);
+    const map = raw ? JSON.parse(raw) : {};
+    if (vote === 0) {
+      delete map[commentId];
+    } else {
+      map[commentId] = vote;
+    }
+    localStorage.setItem(COMMENT_VOTES_STORAGE_KEY, JSON.stringify(map));
+  } catch {
+    // Ignore
+  }
+}
+
 export function CommentSection({
   postId,
   userSession,
@@ -101,6 +131,7 @@ export function CommentSection({
       });
 
       if (res.success) {
+        setStoredCommentVote(commentId, res.userVote);
         // Optimistic update of local comments tree
         const updateTree = (list: CommentDTO[]): CommentDTO[] => {
           return list.map((item) => {
@@ -129,6 +160,7 @@ export function CommentSection({
   const renderComment = (comment: CommentDTO, depth = 0) => {
     const persona = getAnonymousPersona(comment.anonUserId);
     const isReplying = replyingToId === comment.id;
+    const currentVote = getStoredCommentVote(comment.id) || comment.userVote || 0;
 
     return (
       <div
@@ -165,7 +197,7 @@ export function CommentSection({
                 type="button"
                 onClick={() => handleVote(comment.id, 1)}
                 className={`p-1 rounded-md transition ${
-                  comment.userVote === 1
+                  currentVote === 1
                     ? "text-[#6C1C74] dark:text-[#d880ea] bg-[#6C1C74]/15 dark:bg-[#b54ec4]/20"
                     : "text-muted-foreground hover:text-[#6C1C74] dark:hover:text-[#d880ea]"
                 }`}
@@ -188,7 +220,7 @@ export function CommentSection({
                 type="button"
                 onClick={() => handleVote(comment.id, -1)}
                 className={`p-1 rounded-md transition ${
-                  comment.userVote === -1
+                  currentVote === -1
                     ? "text-red-500 bg-red-500/15"
                     : "text-muted-foreground hover:text-red-500 dark:hover:text-red-400"
                 }`}

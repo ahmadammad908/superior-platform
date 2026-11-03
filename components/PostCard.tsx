@@ -27,15 +27,56 @@ interface PostCardProps {
   userSession: AnonUserSession;
 }
 
+const VOTES_STORAGE_KEY = "superior_conn_votes";
+
+function getStoredVote(postId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const raw = localStorage.getItem(VOTES_STORAGE_KEY);
+    if (!raw) return 0;
+    const map = JSON.parse(raw);
+    return typeof map[postId] === "number" ? map[postId] : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function setStoredVote(postId: string, vote: number) {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(VOTES_STORAGE_KEY);
+    const map = raw ? JSON.parse(raw) : {};
+    if (vote === 0) {
+      delete map[postId];
+    } else {
+      map[postId] = vote;
+    }
+    localStorage.setItem(VOTES_STORAGE_KEY, JSON.stringify(map));
+  } catch {
+    // Ignore storage issues
+  }
+}
+
 export function PostCard({ post, userSession }: PostCardProps) {
   const [score, setScore] = useState(post.score);
   const [upvotes, setUpvotes] = useState(post.upvotes);
   const [downvotes, setDownvotes] = useState(post.downvotes);
-  const [userVote, setUserVote] = useState(post.userVote || 0);
+  const [userVote, setUserVote] = useState<number>(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [commentCount, setCommentCount] = useState(post.commentCount);
   const [isCopied, setIsCopied] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
+
+  // Restore persistent vote state on mount and keep in sync across page refreshes
+  React.useEffect(() => {
+    const stored = getStoredVote(post.id);
+    if (stored !== 0) {
+      setUserVote(stored);
+    } else if (post.userVote) {
+      setUserVote(post.userVote);
+      setStoredVote(post.id, post.userVote);
+    }
+  }, [post.id, post.userVote]);
 
   const persona = getAnonymousPersona(post.anonUserId);
   const expiryText = getExpiryRemaining(post.expiresAt);
@@ -65,6 +106,7 @@ export function PostCard({ post, userSession }: PostCardProps) {
 
     setUserVote(nextVote);
     setScore(nextScore);
+    setStoredVote(post.id, nextVote);
 
     try {
       const res = await castVote({
@@ -79,15 +121,18 @@ export function PostCard({ post, userSession }: PostCardProps) {
         setScore(res.newScore);
         setUpvotes(res.newUpvotes);
         setDownvotes(res.newDownvotes);
+        setStoredVote(post.id, res.userVote);
       } else {
         // Revert
         setUserVote(prevVote);
         setScore(prevScore);
+        setStoredVote(post.id, prevVote);
       }
     } catch {
       // Revert
       setUserVote(prevVote);
       setScore(prevScore);
+      setStoredVote(post.id, prevVote);
     } finally {
       setIsVoting(false);
     }
