@@ -5,8 +5,6 @@ import Link from "next/link";
 import {
   Shield,
   PlusCircle,
-  RotateCcw,
-  Check,
   Lock,
   Ghost,
   EyeOff,
@@ -22,64 +20,51 @@ interface NavbarProps {
 
 export function Navbar({ userSession, onOpenCreateModal }: NavbarProps) {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const [copiedNotification, setCopiedNotification] = useState(false);
-
-  const handleReset = () => {
-    userSession.resetIdentity();
-    setCopiedNotification(true);
-    setTimeout(() => setCopiedNotification(false), 2500);
-  };
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/90 dark:bg-background/90 border-b border-border transition-colors">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 flex-nowrap">
-          {/* Logo & Brand (Never wraps, shrink-0) */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0 group">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#6C1C74] flex items-center justify-center text-white shadow-md shadow-[#6C1C74]/20 group-hover:scale-105 transition-transform shrink-0">
+      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/95 dark:bg-background/95 border-b border-border transition-colors">
+        <div className="max-w-6xl mx-auto px-2.5 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-3 flex-nowrap w-full overflow-hidden">
+          {/* Logo & Brand (Responsive: 'Superior' on mobile, 'Superior Connection' on tablet/desktop) */}
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#6C1C74] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
               <Ghost className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div className="flex flex-col shrink-0">
               <span className="font-extrabold text-sm sm:text-lg tracking-tight text-[#6C1C74] dark:text-[#d880ea] whitespace-nowrap leading-tight">
-                Superior Connection
+                <span className="sm:hidden">Superior</span>
+                <span className="hidden sm:inline">Superior Connection</span>
               </span>
               <span className="text-[10px] text-muted-foreground font-medium -mt-0.5 hidden md:block whitespace-nowrap">
-                Anonymous University Platform • No Accounts
+                Anonymous University Platform
               </span>
             </div>
           </Link>
 
-          {/* User Session & Actions (Single horizontal row, no wrap) */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 flex-nowrap">
-            {/* Anonymous Persona Pill */}
-            <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-border bg-card shadow-2xs text-xs font-medium whitespace-nowrap shrink-0">
+          {/* User Session & Actions (Completely fits without overflow) */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 flex-nowrap">
+            {/* Anonymous Persona Pill (Clean #Tag without regenerate button) */}
+            <div
+              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full border border-border bg-card shadow-2xs text-xs font-semibold whitespace-nowrap shrink-0"
+              title={`Anonymous persona: ${userSession.name || "Student"}`}
+            >
               <div
-                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0"
+                className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: userSession.badgeColor || "#6C1C74" }}
               />
-              <span className="font-bold text-foreground text-xs hidden lg:inline max-w-[100px] truncate">
+              <span className="text-foreground hidden lg:inline max-w-[90px] truncate">
                 {userSession.name}
               </span>
-              <span className="text-muted-foreground font-mono text-[11px] font-semibold">
+              <span className="font-mono text-[#6C1C74] dark:text-[#d880ea] text-[11px] sm:text-xs">
                 {userSession.tag}
               </span>
-
-              {/* Reset Identity Button */}
-              <button
-                type="button"
-                onClick={handleReset}
-                title="Generate new anonymous identity"
-                className="ml-0.5 text-muted-foreground hover:text-[#6C1C74] dark:hover:text-[#d880ea] transition p-0.5 cursor-pointer shrink-0"
-              >
-                <RotateCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
             </div>
 
             {/* Privacy Architecture Info Button (Desktop Only) */}
             <button
               type="button"
               onClick={() => setShowPrivacyModal(true)}
-              className="p-1.5 sm:p-2 rounded-xl text-muted-foreground hover:text-[#6C1C74] hover:bg-[#6C1C74]/10 transition-colors border border-border hidden md:flex items-center gap-1 text-xs shrink-0 cursor-pointer"
+              className="p-2 rounded-xl text-muted-foreground hover:text-[#6C1C74] hover:bg-[#6C1C74]/10 transition-colors border border-border hidden md:flex items-center gap-1 text-xs shrink-0 cursor-pointer"
               title="View Security & Anonymity Architecture"
             >
               <Shield className="w-4 h-4 text-[#6C1C74]" />
@@ -91,27 +76,19 @@ export function Navbar({ userSession, onOpenCreateModal }: NavbarProps) {
               <ThemeToggle />
             </div>
 
-            {/* Create Post Button (Responsive: icon + text on desktop, icon + 'Post' on mobile) */}
+            {/* Create Post Button */}
             <button
               type="button"
               onClick={onOpenCreateModal}
-              className="inline-flex items-center gap-1 sm:gap-1.5 bg-[#6C1C74] hover:bg-[#56165d] active:scale-95 text-white text-xs sm:text-sm font-bold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl shadow-xs transition cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1 bg-[#6C1C74] hover:bg-[#56165d] active:scale-95 text-white text-xs sm:text-sm font-bold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl shadow-xs transition cursor-pointer whitespace-nowrap shrink-0"
             >
-              <PlusCircle className="w-4 h-4 shrink-0" />
+              <PlusCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span className="hidden sm:inline">Create Post</span>
-              <span className="sm:hidden text-xs">Post</span>
+              <span className="sm:hidden">Post</span>
             </button>
           </div>
         </div>
       </header>
-
-      {/* Ephemeral Identity Reset Toast */}
-      {copiedNotification && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#6C1C74] text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-semibold animate-in fade-in slide-in-from-bottom-2">
-          <Check className="w-4 h-4 text-emerald-300 shrink-0" />
-          <span>New anonymous persona generated. Previous session erased.</span>
-        </div>
-      )}
 
       {/* Security & Zero-Log Architecture Modal */}
       {showPrivacyModal && (
@@ -144,7 +121,7 @@ export function Navbar({ userSession, onOpenCreateModal }: NavbarProps) {
                 <div>
                   <strong className="text-foreground">No Accounts or Signups:</strong> You never
                   provide your name, student ID, or password. Your browser holds an ephemeral client
-                  UUID you can refresh at any second.
+                  UUID.
                 </div>
               </div>
 

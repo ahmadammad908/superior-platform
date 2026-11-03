@@ -30,10 +30,10 @@ export function AppShell({ initialPosts }: AppShellProps) {
       />
 
       {/* Main Container */}
-      <main className="max-w-6xl w-full mx-auto px-4 py-6 flex-1">
+      <main className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Main Feed Column (8 cols on desktop) */}
-          <section className="lg:col-span-8 w-full">
+          <section className="lg:col-span-8 w-full min-w-0">
             <Feed
               initialPosts={posts}
               userSession={userSession}
@@ -41,10 +41,10 @@ export function AppShell({ initialPosts }: AppShellProps) {
             />
           </section>
 
-          {/* Right Sidebar Column (4 cols on desktop) */}
-          <section className="hidden lg:block lg:col-span-4 sticky top-20">
+          {/* Right Sidebar Column (4 cols on desktop) - Sticky Sidebar */}
+          <aside className="hidden lg:block lg:col-span-4 sticky top-20 self-start space-y-4">
             <SidebarInfo />
-          </section>
+          </aside>
         </div>
       </main>
 

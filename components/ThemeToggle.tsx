@@ -35,11 +35,11 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       type="button"
-      className="p-2 rounded-xl text-foreground/80 hover:text-[#6C1C74] hover:bg-[#6C1C74]/10 transition-colors border border-border"
+      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl text-foreground/80 hover:text-[#6C1C74] hover:bg-[#6C1C74]/10 transition-colors border border-border cursor-pointer shrink-0"
       title={isDark ? "Switch to Clean White Light Theme" : "Switch to Dark Mode"}
       aria-label="Toggle theme"
     >
-      {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-[#6C1C74]" />}
+      {isDark ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#6C1C74]" />}
     </button>
   );
 }

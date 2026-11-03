@@ -67,7 +67,8 @@ export function getAnonymousPersona(anonUserId: string): {
 
   const adj = ANONYMOUS_ADJECTIVES[positive % ANONYMOUS_ADJECTIVES.length];
   const noun = ANONYMOUS_NOUNS[(positive >> 4) % ANONYMOUS_NOUNS.length];
-  const tag = `#${anonUserId.slice(0, 4).toUpperCase()}`;
+  const cleanId = anonUserId.replace(/^usr_/, "");
+  const tag = `#${(cleanId.slice(0, 4) || "74A1").toUpperCase()}`;
 
   // Palette centered around #6C1C74 and high-contrast complementary shades
   const colors = [

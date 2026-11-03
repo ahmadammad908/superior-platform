@@ -11,6 +11,9 @@ import {
   ShieldCheck,
   Check,
   Flame,
+  Video,
+  Camera,
+  Play,
 } from "lucide-react";
 import { PostDTO } from "@/app/actions/getPosts";
 import { castVote } from "@/app/actions/vote";
@@ -126,13 +129,30 @@ export function PostCard({ post, userSession }: PostCardProps) {
           </div>
         </div>
 
-        {/* Expiry Pill if Post Has Self-Destruct Set */}
-        {expiryText && (
-          <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-semibold">
-            <Clock className="w-3.5 h-3.5" />
-            <span>{expiryText}</span>
-          </div>
-        )}
+        {/* Right Badges: Video/Photo indicator + Expiry Pill */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {post.mediaType === "video" && (
+            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950/70 border border-purple-300 dark:border-purple-800 text-[#6C1C74] dark:text-[#d880ea] text-[11px] font-extrabold shadow-2xs">
+              <Video className="w-3.5 h-3.5" />
+              <span>Video</span>
+            </div>
+          )}
+
+          {post.mediaType === "image" && (
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-semibold">
+              <Camera className="w-3 h-3" />
+              <span>Photo</span>
+            </div>
+          )}
+
+          {/* Expiry Pill if Post Has Self-Destruct Set */}
+          {expiryText && (
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-semibold">
+              <Clock className="w-3.5 h-3.5" />
+              <span>{expiryText}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Title */}
@@ -149,20 +169,31 @@ export function PostCard({ post, userSession }: PostCardProps) {
 
       {/* Media Attachment (Cloudinary Direct Signed Uploads) */}
       {post.mediaUrl && (
-        <div className="mb-4 rounded-xl overflow-hidden border border-border/80 bg-black/5 dark:bg-black/30">
+        <div className="relative mb-4 rounded-2xl overflow-hidden border border-border/80 bg-black group shadow-xs">
           {post.mediaType === "video" ? (
-            <video
-              src={post.mediaUrl}
-              controls
-              className="w-full max-h-96 object-contain rounded-xl bg-black"
-            />
+            <div className="relative w-full bg-black flex flex-col">
+              {/* Floating Video Clip Badge Overlay */}
+              <div className="absolute top-3 left-3 z-10 pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow-md">
+                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <Video className="w-3.5 h-3.5 text-[#d880ea]" />
+                <span>Video Clip</span>
+              </div>
+
+              <video
+                src={post.mediaUrl}
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full max-h-[460px] object-contain rounded-2xl bg-black"
+              />
+            </div>
           ) : (
             <div className="relative w-full h-72 sm:h-96">
               <Image
                 src={post.mediaUrl}
                 alt={post.title || "User post media"}
                 fill
-                className="object-cover rounded-xl"
+                className="object-cover rounded-2xl"
                 sizes="(max-width: 768px) 100vw, 700px"
               />
             </div>

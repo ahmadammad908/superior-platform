@@ -13,7 +13,7 @@ import {
 
 export function SidebarInfo() {
   return (
-    <aside className="w-full space-y-4">
+    <div className="w-full space-y-4">
       {/* Platform Security Snapshot */}
       <div className="bg-card text-card-foreground border border-border rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
         <div className="flex items-center gap-2">
@@ -87,13 +87,13 @@ export function SidebarInfo() {
       <div className="text-[11px] text-muted-foreground px-2 space-y-1">
         <div className="flex items-center justify-between">
           <span>Superior Connection © {new Date().getFullYear()}</span>
-          <span className="text-[#6C1C74] font-semibold">v1.0 Serverless</span>
+          <span className="text-[#6C1C74] dark:text-[#d880ea] font-semibold">v1.0 Serverless</span>
         </div>
         <p className="text-[10px] text-muted-foreground/80">
           Built with Next.js App Router, React 19 & Tailwind CSS.
         </p>
       </div>
-    </aside>
+    </div>
   );
 }
 

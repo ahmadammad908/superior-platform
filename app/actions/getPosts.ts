@@ -110,6 +110,22 @@ function getFallbackPosts(): PostDTO[] {
   const now = Date.now();
   return [
     {
+      id: "demo-post-video",
+      anonUserId: "usr_5521ae89b2",
+      title: "Robotics club rover prototype test run in the central courtyard! 🤖🚀",
+      content:
+        "First obstacle navigation test with the new lidar sensor array. Complete success! Autonomous pathfinding calculated on-device. Check out the demo clip below:",
+      mediaUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      mediaType: "video",
+      upvotes: 114,
+      downvotes: 2,
+      score: 112,
+      commentCount: 23,
+      expiresAt: new Date(now + 5 * 86400000).toISOString(),
+      createdAt: new Date(now - 1000 * 60 * 15).toISOString(),
+      userVote: 0,
+    },
+    {
       id: "demo-post-1",
       anonUserId: "usr_998129a0c1",
       title: "Library 4th floor quiet study rooms are secretly open late tonight",
