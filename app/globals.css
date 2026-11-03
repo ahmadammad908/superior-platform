@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-brand: #6C1C74;
+  --color-brand-hover: #56165d;
+  --color-brand-light: #fbf5fc;
+  --color-brand-muted: #8b3494;
+  --color-brand-dark: #b54ec4;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* Crisp, clean light mode with soft background contrast so cards pop */
+  --background: #f7f6f9;
+  --foreground: #140d18;
+  --card: #ffffff;
+  --card-foreground: #140d18;
+  --popover: #ffffff;
+  --popover-foreground: #140d18;
+  --primary: #6C1C74;
+  --primary-foreground: #ffffff;
+  --primary-hover: #54155a;
+  --primary-light: #f6ebf8;
+  --secondary: #ede8f0;
+  --secondary-foreground: #1c1421;
+  --muted: #f0ebf3;
+  --muted-foreground: #5a5060;
+  --accent: #f5eaf7;
+  --accent-foreground: #6C1C74;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e3d7e7;
+  --input: #e3d7e7;
+  --ring: #6C1C74;
+}
+
+.dark {
+  /* Balanced, high-contrast dark mode: no pitch-black void, clear card elevation */
+  --background: #0e0a14;
+  --foreground: #faf7fc;
+  --card: #181222;
+  --card-foreground: #faf7fc;
+  --popover: #181222;
+  --popover-foreground: #faf7fc;
+  --primary: #b54ec4;
+  --primary-foreground: #ffffff;
+  --primary-hover: #c662d5;
+  --primary-light: #2d1a3e;
+  --secondary: #261c36;
+  --secondary-foreground: #f4ecfa;
+  --muted: #241a33;
+  --muted-foreground: #b6abc2;
+  --accent: #2c1c3f;
+  --accent-foreground: #d880ea;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #35264b;
+  --input: #35264b;
+  --ring: #b54ec4;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  min-height: 100vh;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(108, 28, 116, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(108, 28, 116, 0.5);
 }

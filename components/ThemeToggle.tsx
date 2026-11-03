@@ -1,0 +1,47 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
+
+export function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Default to Clean White Light Theme unless user explicitly chose dark
+    const stored = localStorage.getItem("theme");
+    const isDarkMode = stored === "dark";
+
+    setIsDark(isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDark(true);
+    }
+  };
+
+  return (
+    <button
+      onClick={toggleTheme}
+      type="button"
+      className="p-2 rounded-xl text-foreground/80 hover:text-[#6C1C74] hover:bg-[#6C1C74]/10 transition-colors border border-border"
+      title={isDark ? "Switch to Clean White Light Theme" : "Switch to Dark Mode"}
+      aria-label="Toggle theme"
+    >
+      {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-[#6C1C74]" />}
+    </button>
+  );
+}
+
+export default ThemeToggle;

@@ -1,0 +1,269 @@
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import {
+  ArrowBigUp,
+  ArrowBigDown,
+  MessageSquare,
+  Share2,
+  Clock,
+  ShieldCheck,
+  Check,
+  Flame,
+} from "lucide-react";
+import { PostDTO } from "@/app/actions/getPosts";
+import { castVote } from "@/app/actions/vote";
+import { getAnonymousPersona } from "@/lib/anonUser";
+import { formatTimeAgo, getExpiryRemaining } from "@/lib/utils";
+import { AnonUserSession } from "@/hooks/useAnonUser";
+import CommentSection from "./CommentSection";
+
+interface PostCardProps {
+  post: PostDTO;
+  userSession: AnonUserSession;
+}
+
+export function PostCard({ post, userSession }: PostCardProps) {
+  const [score, setScore] = useState(post.score);
+  const [upvotes, setUpvotes] = useState(post.upvotes);
+  const [downvotes, setDownvotes] = useState(post.downvotes);
+  const [userVote, setUserVote] = useState(post.userVote || 0);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(post.commentCount);
+  const [isCopied, setIsCopied] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
+
+  const persona = getAnonymousPersona(post.anonUserId);
+  const expiryText = getExpiryRemaining(post.expiresAt);
+
+  const handleVote = async (type: 1 | -1) => {
+    if (isVoting) return;
+    setIsVoting(true);
+
+    // Optimistic calculation
+    const prevVote = userVote;
+    const prevScore = score;
+    let nextVote = 0;
+    let nextScore = score;
+
+    if (prevVote === type) {
+      // Toggle off
+      nextVote = 0;
+      nextScore = type === 1 ? score - 1 : score + 1;
+    } else if (prevVote === 0) {
+      nextVote = type;
+      nextScore = type === 1 ? score + 1 : score - 1;
+    } else {
+      // Switched from -1 to 1 or vice versa
+      nextVote = type;
+      nextScore = type === 1 ? score + 2 : score - 2;
+    }
+
+    setUserVote(nextVote);
+    setScore(nextScore);
+
+    try {
+      const res = await castVote({
+        targetId: post.id,
+        targetType: "post",
+        voteType: type,
+        anonUserId: userSession.anonUserId,
+      });
+
+      if (res.success) {
+        setUserVote(res.userVote);
+        setScore(res.newScore);
+        setUpvotes(res.newUpvotes);
+        setDownvotes(res.newDownvotes);
+      } else {
+        // Revert
+        setUserVote(prevVote);
+        setScore(prevScore);
+      }
+    } catch {
+      // Revert
+      setUserVote(prevVote);
+      setScore(prevScore);
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/#post-${post.id}`;
+    navigator.clipboard.writeText(url);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  return (
+    <article
+      id={`post-${post.id}`}
+      className="bg-card text-card-foreground border border-border hover:border-[#6C1C74]/50 dark:hover:border-[#b54ec4]/50 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200"
+    >
+      {/* Post Header: Persona, Timestamp & Expiry Badge */}
+      <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2.5">
+          {/* Persona Avatar Seed Badge */}
+          <div
+            className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0"
+            style={{ backgroundColor: persona.badgeColor || "#6C1C74" }}
+          >
+            {persona.name.charAt(0)}
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-bold text-sm text-foreground hover:text-[#6C1C74] dark:hover:text-[#d880ea] transition">
+                {persona.name}
+              </span>
+              <span className="text-xs font-mono text-muted-foreground font-medium">{persona.tag}</span>
+            </div>
+            <span className="text-xs text-muted-foreground">
+              {formatTimeAgo(post.createdAt)}
+            </span>
+          </div>
+        </div>
+
+        {/* Expiry Pill if Post Has Self-Destruct Set */}
+        {expiryText && (
+          <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-semibold">
+            <Clock className="w-3.5 h-3.5" />
+            <span>{expiryText}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Title */}
+      {post.title && (
+        <h2 className="text-base sm:text-lg font-bold text-foreground mb-2 leading-snug">
+          {post.title}
+        </h2>
+      )}
+
+      {/* Content */}
+      <p className="text-sm sm:text-[15px] text-foreground whitespace-pre-wrap leading-relaxed mb-4">
+        {post.content}
+      </p>
+
+      {/* Media Attachment (Cloudinary Direct Signed Uploads) */}
+      {post.mediaUrl && (
+        <div className="mb-4 rounded-xl overflow-hidden border border-border/80 bg-black/5 dark:bg-black/30">
+          {post.mediaType === "video" ? (
+            <video
+              src={post.mediaUrl}
+              controls
+              className="w-full max-h-96 object-contain rounded-xl bg-black"
+            />
+          ) : (
+            <div className="relative w-full h-72 sm:h-96">
+              <Image
+                src={post.mediaUrl}
+                alt={post.title || "User post media"}
+                fill
+                className="object-cover rounded-xl"
+                sizes="(max-width: 768px) 100vw, 700px"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Bottom Action Bar: Vote Widget, Comment Toggle, Share */}
+      <div className="flex items-center justify-between pt-2 border-t border-border/60 text-xs font-semibold">
+        {/* Voting Controller */}
+        <div className="flex items-center bg-muted/60 rounded-xl p-1 border border-border">
+          <button
+            type="button"
+            onClick={() => handleVote(1)}
+            disabled={isVoting}
+            className={`p-1.5 rounded-lg transition active:scale-90 ${
+              userVote === 1
+                ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
+                : "text-muted-foreground hover:text-[#6C1C74] dark:hover:text-[#d880ea] hover:bg-[#6C1C74]/10 dark:hover:bg-[#b54ec4]/15"
+            }`}
+            title="Upvote post"
+          >
+            <ArrowBigUp className="w-5 h-5" />
+          </button>
+
+          <span
+            className={`px-2.5 font-bold text-sm ${
+              score > 0
+                ? "text-[#6C1C74] dark:text-[#d880ea]"
+                : score < 0
+                ? "text-red-500 dark:text-red-400"
+                : "text-muted-foreground"
+            }`}
+          >
+            {score}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => handleVote(-1)}
+            disabled={isVoting}
+            className={`p-1.5 rounded-lg transition active:scale-90 ${
+              userVote === -1
+                ? "bg-red-500 text-white shadow-xs"
+                : "text-muted-foreground hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10"
+            }`}
+            title="Downvote post"
+          >
+            <ArrowBigDown className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Right Action Icons: Comments & Share */}
+        <div className="flex items-center gap-2">
+          {/* Comment Count & Toggle */}
+          <button
+            type="button"
+            onClick={() => setCommentsOpen(!commentsOpen)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition ${
+              commentsOpen
+                ? "border-[#6C1C74] dark:border-[#b54ec4] bg-[#6C1C74]/15 dark:bg-[#b54ec4]/20 text-[#6C1C74] dark:text-[#d880ea]"
+                : "border-border hover:bg-muted text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>{commentCount}</span>
+            <span className="hidden sm:inline">Comments</span>
+          </button>
+
+          {/* Share */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition"
+            title="Copy post link"
+          >
+            {isCopied ? (
+              <>
+                <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Share</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Expanded Nested Comments Section */}
+      {commentsOpen && (
+        <CommentSection
+          postId={post.id}
+          userSession={userSession}
+          initialCount={commentCount}
+        />
+      )}
+    </article>
+  );
+}
+
+export default PostCard;

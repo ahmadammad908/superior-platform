@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Superior Connection 🎓
 
-## Getting Started
+> **High-Performance, Completely Anonymous University Platform**
+> Post campus discussions, photos, and short videos with zero accounts, zero signups, and zero raw IP logging.
 
-First, run the development server:
+---
+
+## 🎨 Branding & Theme
+- **Platform Name:** Superior Connection
+- **Primary Brand Color:** `#6C1C74` (Rich Purple)
+- **Base Theme:** Clean White (`#FFFFFF`) with dark mode toggle where `#6C1C74` acts as the primary accent and text highlight.
+
+---
+
+## 🛡️ Security & Privacy Architecture
+
+| Feature | Implementation | Privacy / Security Benefit |
+| :--- | :--- | :--- |
+| **Anonymous Session** | Ephemeral Client UUID (`localStorage`) | No student names, emails, passwords, or signup forms required. Students can rotate their identity at any time with 1 click. |
+| **Hashed Rate Limiting** | Upstash Redis + `SHA-256(IP + UserAgent + SecretSalt)` | Prevents spam, bot flooding, and DDoS without storing or logging raw student IP addresses in database tables or logs. |
+| **EXIF Metadata Stripping** | Cloudinary Direct Signed Uploads (`image_metadata: false`) | Media is uploaded straight from browser to Cloudinary. Strips GPS coordinates, camera model, and creation timestamps before media is hosted. |
+| **Local AI-Free Moderation** | Zero-cost deterministic Regex & Leetspeak normalizer (`lib/moderation.ts`) | Intercepts harassment, slurs, cheating rings, and doxxing (phone numbers, student IDs, emails) before database insertion without paying for or sending data to external AI APIs. |
+| **Bot Protection** | Cloudflare Turnstile | Invisible human verification challenge preventing scripted automated bot submissions. |
+| **Auto-Expiry Self-Destruct** | MongoDB TTL Index (`expiresAt`) | Allows students to publish posts that automatically delete after 24 hours, 3 days, 7 days, or 30 days. |
+| **Anti-Double-Vote Protection**| `voterHash` Unique Compound Index | `HMAC-SHA256(anonUserId + IP + Salt)` guarantees one vote per student per item without recording who voted for what. |
+
+---
+
+## 🚀 Technical Stack
+- **Framework:** Next.js (App Router, React 19, TypeScript)
+- **Styling:** Tailwind CSS with `#6C1C74` brand palette, Lucide Icons
+- **Database:** MongoDB Atlas with Mongoose ORM
+- **Cache & Rate Limiting:** Upstash Redis (Serverless REST API)
+- **Storage:** Cloudinary (Direct client-to-cloud signed uploads, max 30MB)
+- **Verification:** Cloudflare Turnstile
+
+---
+
+## ⚙️ Environment Configuration
+
+Copy `.env.example` to `.env.local` and populate the required keys:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Required Variables
+```ini
+# MongoDB Atlas
+MONGODB_URI="mongodb+srv://<user>:<password>@cluster0.mongodb.net/superior_connection"
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Upstash Redis
+UPSTASH_REDIS_REST_URL="https://your-upstash-instance.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="your_upstash_token"
+RATE_LIMIT_SALT="cryptographic_random_salt_string"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Cloudinary
+CLOUDINARY_CLOUD_NAME="your_cloud_name"
+CLOUDINARY_API_KEY="your_api_key"
+CLOUDINARY_API_SECRET="your_api_secret"
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your_cloud_name"
 
-## Learn More
+# Cloudflare Turnstile
+NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY="1x00000000000000000000AA"
+CLOUDFLARE_TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏃 Running the Application
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Production Build
+```bash
+npm run build
+npm run start
+```
