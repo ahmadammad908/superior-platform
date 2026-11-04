@@ -71,7 +71,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full max-w-2xl mx-auto space-y-4">
       {/* Quick Creator Box */}
       <div
         onClick={onOpenCreateModal}

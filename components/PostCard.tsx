@@ -140,14 +140,14 @@ export function PostCard({ post, userSession }: PostCardProps) {
   return (
     <article
       id={`post-${post.id}`}
-      className="bg-card text-card-foreground border border-border hover:border-[#6C1C74]/50 dark:hover:border-[#b54ec4]/50 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200"
+      className="w-full  max-w-3xl  mx-auto bg-card text-card-foreground border border-border hover:border-[#6C1C74]/50 dark:hover:border-[#b54ec4]/50 rounded-2xl p-3 sm:p-4 shadow-xs hover:shadow-md transition-all duration-200"
     >
       {/* Post Header: Persona, Timestamp & Expiry Badge */}
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2.5">
           {/* Persona Avatar Seed Badge */}
           <div
-            className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0"
             style={{ backgroundColor: persona.badgeColor || "#6C1C74" }}
           >
             {persona.name.charAt(0)}
@@ -194,21 +194,22 @@ export function PostCard({ post, userSession }: PostCardProps) {
 
       {/* Title */}
       {post.title && (
-        <h2 className="text-base sm:text-lg font-bold text-foreground mb-2 leading-snug">
+        <h2 className="text-sm sm:text-base font-bold text-foreground mb-1.5 leading-snug">
           {post.title}
         </h2>
       )}
 
       {/* Content */}
-      <p className="text-sm sm:text-[15px] text-foreground whitespace-pre-wrap leading-relaxed mb-4">
+      <p className="text-[13px] sm:text-sm text-foreground whitespace-pre-wrap leading-relaxed mb-3">
         {post.content}
       </p>
 
       {/* Media Attachment (Cloudinary Direct Signed Uploads) */}
+            {/* Media Attachment (Cloudinary Direct Signed Uploads) */}
       {post.mediaUrl && (
-        <div className="relative mb-4 rounded-2xl overflow-hidden border border-border/80 bg-black group shadow-xs">
+        <div className="relative mb-4 w-full rounded-2xl overflow-hidden border border-border/80 group shadow-xs bg-transparent">
           {post.mediaType === "video" ? (
-            <div className="relative w-full bg-black flex flex-col">
+            <div className="relative w-full">
               {/* Floating Video Clip Badge Overlay */}
               <div className="absolute top-3 left-3 z-10 pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow-md">
                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -221,17 +222,18 @@ export function PostCard({ post, userSession }: PostCardProps) {
                 controls
                 playsInline
                 preload="metadata"
-                className="w-full max-h-[460px] object-contain rounded-2xl bg-black"
+                className="block w-full h-auto sm:h-[420px] object-contain sm:object-cover bg-black"
               />
             </div>
           ) : (
-            <div className="relative w-full h-72 sm:h-96">
+            <div className="relative w-full">
               <Image
                 src={post.mediaUrl}
                 alt={post.title || "User post media"}
-                fill
-                className="object-cover rounded-2xl"
-                sizes="(max-width: 768px) 100vw, 700px"
+                width={0}
+                height={0}
+                sizes="(max-width: 640px) 100vw, 768px"
+                className="block w-full h-auto sm:max-h-[640px] object-cover object-top"
               />
             </div>
           )}
