@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import {
   Flame,
   Zap,
   Clock,
   Search,
-  Filter,
   RefreshCw,
   PlusCircle,
-  Sparkles,
-  SlidersHorizontal,
   X,
   Ghost,
 } from "lucide-react";
@@ -100,7 +97,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
 
       {/* Sorting Tabs & Search Bar */}
       <div className="bg-card border border-border rounded-2xl p-3 sm:p-4 shadow-xs space-y-3">
-<<<<<<< HEAD
+        {/* Row: Sort tabs (top on mobile, left on desktop) + Search (bottom on mobile, right on desktop) */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
           {/* Sorting Tabs */}
           <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-border text-xs font-semibold shrink-0">
@@ -108,68 +105,38 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
               type="button"
               onClick={() => handleSortChange("trending")}
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
-=======
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Sorting Tabs */}
-          <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-border text-xs font-semibold">
-            <button
-              type="button"
-              onClick={() => handleSortChange("trending")}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "trending"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-<<<<<<< HEAD
               <Flame className="w-3.5 h-3.5 shrink-0" />
-=======
-              <Flame className="w-3.5 h-3.5" />
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
               <span>Trending</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleSortChange("top")}
-<<<<<<< HEAD
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
-=======
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "top"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-<<<<<<< HEAD
               <Zap className="w-3.5 h-3.5 shrink-0" />
               <span>Top</span>
-=======
-              <Zap className="w-3.5 h-3.5" />
-              <span>Top Upvoted</span>
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
             </button>
 
             <button
               type="button"
               onClick={() => handleSortChange("recent")}
-<<<<<<< HEAD
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
-=======
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "recent"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-<<<<<<< HEAD
               <Clock className="w-3.5 h-3.5 shrink-0" />
-=======
-              <Clock className="w-3.5 h-3.5" />
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
               <span>Recent</span>
             </button>
           </div>
@@ -184,7 +151,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-7 py-1.5 rounded-xl border border-input bg-background text-xs focus:ring-1 focus:ring-[#6C1C74] focus:outline-hidden transition"
               />
-              <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               {searchQuery && (
                 <button
                   type="button"
@@ -203,7 +170,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
               type="button"
               onClick={() => fetchFeed()}
               disabled={isRefreshing}
-              className="p-2 rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-[#6C1C74] transition"
+              className="p-2 rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-[#6C1C74] transition shrink-0"
               title="Refresh feed"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-[#6C1C74]" : ""}`} />

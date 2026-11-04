@@ -134,7 +134,7 @@ export function CreatePostModal({
         {/* Brand Accent Top Line */}
         <div className="h-2 w-full bg-[#6C1C74]" />
 
-        {/* Modal Header: Clean White */}
+        {/* Modal Header */}
         <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-[#2d1f40] flex items-center justify-between bg-white dark:bg-[#181222]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#6C1C74]/10 dark:bg-[#b54ec4]/20 flex items-center justify-center text-[#6C1C74] dark:text-[#d880ea] shadow-xs">
@@ -160,54 +160,33 @@ export function CreatePostModal({
           </button>
         </div>
 
-        {/* Scrollable Form Body: Pristine White */}
+        {/* Scrollable Form Body */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5 flex-1 bg-white dark:bg-[#181222]">
-          {/* Identity Shield Card: Clean White with Purple Border */}
+          {/* Identity Shield Card */}
           <div className="p-3.5 rounded-2xl bg-purple-50/70 dark:bg-[#231835] border border-purple-200 dark:border-[#4a3468] flex items-center justify-between gap-3 shadow-xs">
-<<<<<<< HEAD
             <div className="flex items-center gap-3 min-w-0">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0"
-=======
-            <div className="flex items-center gap-3">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-xs"
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 style={{ backgroundColor: userSession.badgeColor || "#6C1C74" }}
               >
                 {userSession.name.charAt(0)}
               </div>
-<<<<<<< HEAD
               <div className="min-w-0">
                 <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
                   Posting as{" "}
                   <span className="text-[#6C1C74] dark:text-[#d880ea]">{userSession.name}</span>{" "}
-=======
-              <div>
-                <div className="text-xs font-bold text-slate-900 dark:text-white">
-                  Posting as <span className="text-[#6C1C74] dark:text-[#d880ea]">{userSession.name}</span>{" "}
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                   <span className="font-mono text-purple-700 dark:text-purple-300 text-[11px] font-semibold">
                     {userSession.tag}
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-600 dark:text-slate-300 flex items-center gap-1 font-medium">
-<<<<<<< HEAD
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span className="truncate">Ephemeral Client Identity (Safe &amp; Untraceable)</span>
-=======
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>Ephemeral Client Identity (Safe & Untraceable)</span>
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 </div>
               </div>
             </div>
 
-<<<<<<< HEAD
             <span className="text-[11px] px-2.5 py-1 rounded-full bg-white dark:bg-[#181222] border border-purple-200 dark:border-purple-800 text-[#6C1C74] dark:text-[#d880ea] font-bold flex items-center gap-1 shadow-2xs shrink-0">
-=======
-            <span className="text-[11px] px-2.5 py-1 rounded-full bg-white dark:bg-[#181222] border border-purple-200 dark:border-purple-800 text-[#6C1C74] dark:text-[#d880ea] font-bold flex items-center gap-1 shadow-2xs">
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
               <EyeOff className="w-3.5 h-3.5" />
               Zero-Log
             </span>
@@ -334,7 +313,7 @@ export function CreatePostModal({
           </form>
         </div>
 
-        {/* Modal Footer: Clean Soft White */}
+        {/* Modal Footer */}
         <div className="px-4 sm:px-6 py-3 sm:py-4 bg-slate-50 dark:bg-[#140d1e] border-t border-slate-200 dark:border-[#2d1f40] flex items-center justify-between gap-2 sm:gap-3">
           <div className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:flex items-center gap-1.5 font-medium">
             <Lock className="w-3.5 h-3.5 text-[#6C1C74] dark:text-[#d880ea]" />

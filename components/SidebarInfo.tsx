@@ -8,7 +8,7 @@ import {
   Lock,
   Clock,
   HeartHandshake,
-  ExternalLink,
+ 
 } from "lucide-react";
 
 export function SidebarInfo() {
@@ -21,7 +21,7 @@ export function SidebarInfo() {
             <Lock className="w-4 h-4" />
           </div>
           <h3 className="font-bold text-sm text-[#6C1C74] dark:text-[#d880ea]">
-            Superior Security Shield
+            Superior Security Shield everyone protects you 
           </h3>
         </div>
 

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
-<<<<<<< HEAD
   ThumbsUp,
   MessageSquare,
   Share2,
@@ -11,19 +10,6 @@ import {
   Check,
   Video,
   Camera,
-=======
-  ArrowBigUp,
-  ArrowBigDown,
-  MessageSquare,
-  Share2,
-  Clock,
-  ShieldCheck,
-  Check,
-  Flame,
-  Video,
-  Camera,
-  Play,
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
 } from "lucide-react";
 import { PostDTO } from "@/app/actions/getPosts";
 import { castVote } from "@/app/actions/vote";
@@ -70,22 +56,14 @@ function setStoredVote(postId: string, vote: number) {
 export function PostCard({ post, userSession }: PostCardProps) {
   const [score, setScore] = useState(post.score);
   const [upvotes, setUpvotes] = useState(post.upvotes);
-<<<<<<< HEAD
   // Always start at 0 for SSR/hydration match; restore from localStorage after mount
-=======
-  const [downvotes, setDownvotes] = useState(post.downvotes);
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
   const [userVote, setUserVote] = useState<number>(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [commentCount, setCommentCount] = useState(post.commentCount);
   const [isCopied, setIsCopied] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
 
-<<<<<<< HEAD
   // After hydration: restore persisted like state from localStorage (client-only)
-=======
-  // Restore persistent vote state on mount and keep in sync across page refreshes
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
   React.useEffect(() => {
     const stored = getStoredVote(post.id);
     if (stored !== 0) {
@@ -99,7 +77,6 @@ export function PostCard({ post, userSession }: PostCardProps) {
   const persona = getAnonymousPersona(post.anonUserId);
   const expiryText = getExpiryRemaining(post.expiresAt);
 
-<<<<<<< HEAD
   const handleLike = async () => {
     if (isVoting) return;
     setIsVoting(true);
@@ -118,29 +95,6 @@ export function PostCard({ post, userSession }: PostCardProps) {
       // Not liked yet → like
       nextVote = 1;
       nextScore = score + 1;
-=======
-  const handleVote = async (type: 1 | -1) => {
-    if (isVoting) return;
-    setIsVoting(true);
-
-    // Optimistic calculation
-    const prevVote = userVote;
-    const prevScore = score;
-    let nextVote = 0;
-    let nextScore = score;
-
-    if (prevVote === type) {
-      // Toggle off
-      nextVote = 0;
-      nextScore = type === 1 ? score - 1 : score + 1;
-    } else if (prevVote === 0) {
-      nextVote = type;
-      nextScore = type === 1 ? score + 1 : score - 1;
-    } else {
-      // Switched from -1 to 1 or vice versa
-      nextVote = type;
-      nextScore = type === 1 ? score + 2 : score - 2;
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
     }
 
     setUserVote(nextVote);
@@ -151,11 +105,7 @@ export function PostCard({ post, userSession }: PostCardProps) {
       const res = await castVote({
         targetId: post.id,
         targetType: "post",
-<<<<<<< HEAD
         voteType: 1,
-=======
-        voteType: type,
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
         anonUserId: userSession.anonUserId,
       });
 
@@ -163,26 +113,15 @@ export function PostCard({ post, userSession }: PostCardProps) {
         setUserVote(res.userVote);
         setScore(res.newScore);
         setUpvotes(res.newUpvotes);
-<<<<<<< HEAD
         setStoredVote(post.id, res.userVote);
       } else {
         // Revert on failure
-=======
-        setDownvotes(res.newDownvotes);
-        setStoredVote(post.id, res.userVote);
-      } else {
-        // Revert
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
         setUserVote(prevVote);
         setScore(prevScore);
         setStoredVote(post.id, prevVote);
       }
     } catch {
-<<<<<<< HEAD
       // Revert on error
-=======
-      // Revert
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
       setUserVote(prevVote);
       setScore(prevScore);
       setStoredVote(post.id, prevVote);
@@ -299,9 +238,8 @@ export function PostCard({ post, userSession }: PostCardProps) {
         </div>
       )}
 
-      {/* Bottom Action Bar: Vote Widget, Comment Toggle, Share */}
+      {/* Bottom Action Bar: Like Button, Comment Toggle, Share */}
       <div className="flex items-center justify-between pt-2 border-t border-border/60 text-xs font-semibold">
-<<<<<<< HEAD
         {/* Like Button */}
         <button
           type="button"
@@ -316,52 +254,10 @@ export function PostCard({ post, userSession }: PostCardProps) {
         >
           <ThumbsUp className={`w-4 h-4 ${userVote === 1 ? "fill-white" : ""}`} />
           <span className="font-bold text-sm">{upvotes}</span>
-          <span className="hidden sm:inline text-xs">{userVote === 1 ? "Liked" : "Like"}</span>
-        </button>
-=======
-        {/* Voting Controller */}
-        <div className="flex items-center bg-muted/60 rounded-xl p-1 border border-border">
-          <button
-            type="button"
-            onClick={() => handleVote(1)}
-            disabled={isVoting}
-            className={`p-1.5 rounded-lg transition active:scale-90 ${
-              userVote === 1
-                ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
-                : "text-muted-foreground hover:text-[#6C1C74] dark:hover:text-[#d880ea] hover:bg-[#6C1C74]/10 dark:hover:bg-[#b54ec4]/15"
-            }`}
-            title="Upvote post"
-          >
-            <ArrowBigUp className="w-5 h-5" />
-          </button>
-
-          <span
-            className={`px-2.5 font-bold text-sm ${
-              score > 0
-                ? "text-[#6C1C74] dark:text-[#d880ea]"
-                : score < 0
-                ? "text-red-500 dark:text-red-400"
-                : "text-muted-foreground"
-            }`}
-          >
-            {score}
+          <span className="hidden sm:inline text-xs" suppressHydrationWarning>
+            {userVote === 1 ? "Liked" : "Like"}
           </span>
-
-          <button
-            type="button"
-            onClick={() => handleVote(-1)}
-            disabled={isVoting}
-            className={`p-1.5 rounded-lg transition active:scale-90 ${
-              userVote === -1
-                ? "bg-red-500 text-white shadow-xs"
-                : "text-muted-foreground hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10"
-            }`}
-            title="Downvote post"
-          >
-            <ArrowBigDown className="w-5 h-5" />
-          </button>
-        </div>
->>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
+        </button>
 
         {/* Right Action Icons: Comments & Share */}
         <div className="flex items-center gap-2">
