@@ -100,6 +100,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
 
       {/* Sorting Tabs & Search Bar */}
       <div className="bg-card border border-border rounded-2xl p-3 sm:p-4 shadow-xs space-y-3">
+<<<<<<< HEAD
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
           {/* Sorting Tabs */}
           <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-border text-xs font-semibold shrink-0">
@@ -107,38 +108,68 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
               type="button"
               onClick={() => handleSortChange("trending")}
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
+=======
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Sorting Tabs */}
+          <div className="flex items-center bg-muted/60 p-1 rounded-xl border border-border text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => handleSortChange("trending")}
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "trending"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+<<<<<<< HEAD
               <Flame className="w-3.5 h-3.5 shrink-0" />
+=======
+              <Flame className="w-3.5 h-3.5" />
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
               <span>Trending</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleSortChange("top")}
+<<<<<<< HEAD
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
+=======
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "top"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+<<<<<<< HEAD
               <Zap className="w-3.5 h-3.5 shrink-0" />
               <span>Top</span>
+=======
+              <Zap className="w-3.5 h-3.5" />
+              <span>Top Upvoted</span>
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
             </button>
 
             <button
               type="button"
               onClick={() => handleSortChange("recent")}
+<<<<<<< HEAD
               className={`flex-1 sm:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg transition whitespace-nowrap ${
+=======
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition ${
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
                 activeSort === "recent"
                   ? "bg-[#6C1C74] dark:bg-[#b54ec4] text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+<<<<<<< HEAD
               <Clock className="w-3.5 h-3.5 shrink-0" />
+=======
+              <Clock className="w-3.5 h-3.5" />
+>>>>>>> 47c85c1953039d267dc500809b8bc043aa4291e4
               <span>Recent</span>
             </button>
           </div>
