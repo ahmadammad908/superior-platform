@@ -14,7 +14,7 @@ import {
 import { PostDTO, FeedSortOption, getPosts } from "@/app/actions/getPosts";
 import PostCard from "./PostCard";
 import { AnonUserSession } from "@/hooks/useAnonUser";
-
+import Super from '../public/super3.png'
 interface FeedProps {
   initialPosts: PostDTO[];
   userSession: AnonUserSession;
@@ -206,7 +206,7 @@ export function Feed({ initialPosts, userSession, onOpenCreateModal }: FeedProps
       ) : posts.length === 0 ? (
         <div className="bg-card border border-border rounded-2xl p-8 text-center space-y-3">
           <div className="w-12 h-12 rounded-full bg-[#6C1C74]/10 text-[#6C1C74] flex items-center justify-center mx-auto">
-            <Ghost className="w-6 h-6" />
+            <img src={Super.src} alt="Superior Logo" className="w-full h-full object-cover rounded" />
           </div>
           <h3 className="font-bold text-base text-foreground">No posts found</h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto">

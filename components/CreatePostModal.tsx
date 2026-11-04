@@ -19,7 +19,7 @@ import TurnstileWidget from "./TurnstileWidget";
 import { createPost } from "@/app/actions/createPost";
 import { AnonUserSession } from "@/hooks/useAnonUser";
 import { PostDTO } from "@/app/actions/getPosts";
-
+import Super from '../public/super.png'
 interface CreatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -138,7 +138,7 @@ export function CreatePostModal({
         <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-[#2d1f40] flex items-center justify-between bg-white dark:bg-[#181222]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#6C1C74]/10 dark:bg-[#b54ec4]/20 flex items-center justify-center text-[#6C1C74] dark:text-[#d880ea] shadow-xs">
-              <Sparkles className="w-5 h-5" />
+              <img src={Super.src} alt="Superior Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <h3 className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight">

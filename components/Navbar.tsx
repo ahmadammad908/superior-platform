@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { AnonUserSession } from "@/hooks/useAnonUser";
-
+import Superiordark from '../public/Analysis output 1.png'
 interface NavbarProps {
   userSession: AnonUserSession;
   onOpenCreateModal: () => void;
@@ -27,18 +27,13 @@ export function Navbar({ userSession, onOpenCreateModal }: NavbarProps) {
         <div className="max-w-6xl mx-auto px-2.5 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-3 flex-nowrap w-full overflow-hidden">
           {/* Logo & Brand (Responsive: 'Superior' on mobile, 'Superior Connection' on tablet/desktop) */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 group">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#6C1C74] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
-              <Ghost className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-            </div>
-            <div className="flex flex-col shrink-0">
-              <span className="font-extrabold text-sm sm:text-lg tracking-tight text-[#6C1C74] dark:text-[#d880ea] whitespace-nowrap leading-tight">
-                <span className="sm:hidden">Superior</span>
-                <span className="hidden sm:inline">Superior Connection</span>
-              </span>
-              <span className="text-[10px] text-muted-foreground font-medium -mt-0.5 hidden md:block whitespace-nowrap">
-                Anonymous University Platform
-              </span>
-            </div>
+            <img
+              src={Superiordark.src}
+              alt="Superior Logo"
+              width={150}
+            />
+           
+            
           </Link>
 
           {/* User Session & Actions (Completely fits without overflow) */}
